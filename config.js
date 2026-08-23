@@ -10,5 +10,5 @@
   IMPORTANTE:
   Nunca coloque aqui uma service_role key ou outra chave secreta.
 */
-window.SUPABASE_URL = "COLE_AQUI_A_PROJECT_URL";
-window.SUPABASE_ANON_KEY = "COLE_AQUI_A_PUBLISHABLE_OU_ANON_KEY";
+window.SUPABASE_URL = "https://ydmnbwnkbcawxpqcsopc.supabase.co";
+window.SUPABASE_ANON_KEY = sb_publishable_YIsoU1_fUrb28mMwwDobtQ_Affx_nuC;
