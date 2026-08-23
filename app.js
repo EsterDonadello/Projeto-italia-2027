@@ -1,3 +1,4 @@
+alert("NOVO APP.JS CARREGADO!");
 // ============================================================
 // PROJETO ITÁLIA 2027
 // APP.JS — LOGIN POR E-MAIL + SENHA
