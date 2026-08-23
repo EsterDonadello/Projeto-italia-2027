@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173f35">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Projeto Itália">
+  <title>Projeto Itália 2027</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <span class="eyebrow">🇮🇹 PROJETO ITÁLIA 2027</span>
+        <h1>Ester & Carlos</h1>
+        <p>Checklist, documentos, dinheiro e cronograma — sincronizados entre seus dispositivos.</p>
+      </div>
+      <div class="account">
+        <span id="syncStatus">● Offline</span>
+        <button id="loginBtn">Entrar / Criar conta</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="authPanel" class="card auth hidden">
+    <h2>Sincronização</h2>
+    <p>Entre com seu e-mail para salvar o projeto na nuvem. A mesma conta funciona no iPhone e no computador.</p>
+    <input id="email" type="email" placeholder="seu@email.com">
+    <button id="sendMagicLink" class="primary">Enviar link de acesso</button>
+    <p id="authMessage" class="muted"></p>
+  </section>
+
+  <section class="grid">
+    <div class="card progress">
+      <div class="progressTop"><span>PROGRESSO GERAL</span><strong id="pct">0%</strong></div>
+      <div class="bar"><i id="bar"></i></div>
+      <small id="count">0 de 0 tarefas</small>
+    </div>
+    <div class="card money">
+      <span>💶 META DO CASAL</span>
+      <label>Meta (€)<input id="goal" type="number" min="0"></label>
+      <label>Guardado (€)<input id="saved" type="number" min="0"></label>
+      <strong id="moneyPct">0%</strong>
+    </div>
+  </section>
+
+  <nav id="tabs" class="tabs"></nav>
+  <section id="content"></section>
+</main>
+
+<footer>Projeto Itália 2027 • Sincronização opcional por conta</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
