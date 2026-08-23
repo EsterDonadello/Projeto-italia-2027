@@ -11,4 +11,4 @@
   Nunca coloque aqui uma service_role key ou outra chave secreta.
 */
 window.SUPABASE_URL = "https://ydmnbwnkbcawxpqcsopc.supabase.co";
-window.SUPABASE_ANON_KEY = "sb_publishable_YIsoU1_fUrb28mMwwDobtQ_Affx_nuC";
+window.SUPABASE_ANON_KEY = "sb_publishable_YIsoU1_fUrb28mMwwDobtq_Affx_nuC";
