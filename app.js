@@ -2,26 +2,7 @@ alert("NOVO APP.JS CARREGADO!");
 
 // ============================================================
 // PROJETO ITÁLIA 2027
-// APP.JS — LOGIN POR PERFIL + PIN DE 6 DÍGITOS
-// ============================================================
-
-// ============================================================
-// CONTAS DO PROJETO
-// ============================================================
-//
-// Os e-mails são usados somente internamente para o Supabase.
-// O usuário verá apenas Ester / Carlos + PIN.
-//
-// NÃO coloque os PINs aqui.
-//
-
-const AUTH_USERS = {
-  ester: "esterdonadello2002@gmail.com",
-  carlos: "viniciusduarth@gmail.com"
-};
-
-// ============================================================
-// SEÇÕES
+// APP.JS — LOGIN + SINCRONIZAÇÃO POR USUÁRIO
 // ============================================================
 
 const sections = [
@@ -31,15 +12,29 @@ const sections = [
     icon:"🎓",
     desc:"Documentos pessoais, estudos, visto e preparação acadêmica.",
     tasks:[
-      "Passaporte brasileiro válido","RG/CIN e CPF","Certidão de nascimento atualizada",
-      "Certidão de casamento atualizada","Comprovante de residência no Brasil",
-      "Fotos para o visto","Formulário de visto nacional","Carta de admissão no curso",
-      "Comprovante de matrícula/pagamento","Diploma/certificado de ensino médio",
-      "Histórico escolar completo","Traduções italianas necessárias","Apostilas necessárias",
-      "Declaração de valor/equivalência, se exigida","Comprovação financeira",
-      "Extratos e origem dos recursos","Contracheques/comprovantes de renda",
-      "Declaração de IR, se solicitada","Seguro-saúde","Comprovação de acomodação",
-      "Passagem/itinerário","Pedido do visto","Permesso di soggiorno após chegada"
+      "Passaporte brasileiro válido",
+      "RG/CIN e CPF",
+      "Certidão de nascimento atualizada",
+      "Certidão de casamento atualizada",
+      "Comprovante de residência no Brasil",
+      "Fotos para o visto",
+      "Formulário de visto nacional",
+      "Carta de admissão no curso",
+      "Comprovante de matrícula/pagamento",
+      "Diploma/certificado de ensino médio",
+      "Histórico escolar completo",
+      "Traduções italianas necessárias",
+      "Apostilas necessárias",
+      "Declaração de valor/equivalência, se exigida",
+      "Comprovação financeira",
+      "Extratos e origem dos recursos",
+      "Contracheques/comprovantes de renda",
+      "Declaração de IR, se solicitada",
+      "Seguro-saúde",
+      "Comprovação de acomodação",
+      "Passagem/itinerário",
+      "Pedido do visto",
+      "Permesso di soggiorno após chegada"
     ]
   },
 
@@ -49,15 +44,23 @@ const sections = [
     icon:"👨‍❤️‍👩",
     desc:"Documentos do esposo e preparação familiar.",
     tasks:[
-      "Passaporte brasileiro válido","RG/CIN e CPF","Certidão de nascimento atualizada",
-      "Certidão de casamento atualizada","Apostila da certidão, se exigida",
-      "Tradução italiana da certidão, se exigida","Cópia do passaporte da Ester",
-      "Cópia do visto/permesso da Ester","Comprovante de residência do casal",
+      "Passaporte brasileiro válido",
+      "RG/CIN e CPF",
+      "Certidão de nascimento atualizada",
+      "Certidão de casamento atualizada",
+      "Apostila da certidão, se exigida",
+      "Tradução italiana da certidão, se exigida",
+      "Cópia do passaporte da Ester",
+      "Cópia do visto/permesso da Ester",
+      "Comprovante de residência do casal",
       "Comprovação de renda para o procedimento familiar",
       "Idoneidade habitacional, quando exigida",
       "Pedido de reagrupamento/nulla osta, quando aplicável",
-      "Visto familiar correspondente","Permesso di soggiorno familiar",
-      "Codice fiscale","Currículo em italiano","Comprovantes de experiência profissional"
+      "Visto familiar correspondente",
+      "Permesso di soggiorno familiar",
+      "Codice fiscale",
+      "Currículo em italiano",
+      "Comprovantes de experiência profissional"
     ]
   },
 
@@ -67,12 +70,16 @@ const sections = [
     icon:"📜",
     desc:"Traduções, apostilas e organização.",
     tasks:[
-      "Confirmar documentos exigidos pela escola","Confirmar tradução do diploma",
+      "Confirmar documentos exigidos pela escola",
+      "Confirmar tradução do diploma",
       "Confirmar apostila do histórico",
       "Confirmar declaração de valor/equivalência/CIMEA, se aplicável",
-      "Solicitar certidões recentes","Confirmar apostila da certidão de casamento",
-      "Confirmar tradução da certidão","Digitalizar tudo em PDF",
-      "Fazer cópias físicas","Guardar backup na nuvem"
+      "Solicitar certidões recentes",
+      "Confirmar apostila da certidão de casamento",
+      "Confirmar tradução da certidão",
+      "Digitalizar tudo em PDF",
+      "Fazer cópias físicas",
+      "Guardar backup na nuvem"
     ]
   },
 
@@ -82,11 +89,18 @@ const sections = [
     icon:"💶",
     desc:"Reserva e provas financeiras.",
     tasks:[
-      "Definir meta financeira","Criar reserva da Itália","Organizar extratos",
-      "Guardar comprovantes de salário","Guardar origem das economias",
-      "Separar investimentos, se houver","Separar declaração de IR",
-      "Planejar passagens","Planejar caução + aluguel","Planejar seguro",
-      "Planejar taxas e traduções","Planejar custo de vida inicial"
+      "Definir meta financeira",
+      "Criar reserva da Itália",
+      "Organizar extratos",
+      "Guardar comprovantes de salário",
+      "Guardar origem das economias",
+      "Separar investimentos, se houver",
+      "Separar declaração de IR",
+      "Planejar passagens",
+      "Planejar caução + aluguel",
+      "Planejar seguro",
+      "Planejar taxas e traduções",
+      "Planejar custo de vida inicial"
     ]
   },
 
@@ -96,12 +110,18 @@ const sections = [
     icon:"🇮🇹",
     desc:"Primeiros passos na Itália.",
     tasks:[
-      "Confirmar endereço inicial","Encaminhar permesso dentro do prazo",
-      "Guardar ricevuta","Comparecer à Questura","Providenciar codice fiscale",
-      "Organizar saúde","Registrar residência quando aplicável",
+      "Confirmar endereço inicial",
+      "Encaminhar permesso dentro do prazo",
+      "Guardar ricevuta",
+      "Comparecer à Questura",
+      "Providenciar codice fiscale",
+      "Organizar saúde",
+      "Registrar residência quando aplicável",
       "Iniciar procedimento do Carlos quando permitido",
-      "Acompanhar procedimento familiar","Preparar permesso do Carlos",
-      "Organizar solução bancária","Currículo italiano do casal",
+      "Acompanhar procedimento familiar",
+      "Preparar permesso do Carlos",
+      "Organizar solução bancária",
+      "Currículo italiano do casal",
       "Pesquisar emprego para o Carlos"
     ]
   },
@@ -112,12 +132,17 @@ const sections = [
     icon:"🇮🇹",
     desc:"Pasta paralela da cidadania Donadello.",
     tasks:[
-      "Certidão italiana de Giovani Donadello","Certidão de Ernesto Donadello",
-      "Certidão de Ivanildo João Donadello","Certidão de Odair José Donadello",
-      "Sua certidão de nascimento","Certidões de casamento da linha",
+      "Certidão italiana de Giovani Donadello",
+      "Certidão de Ernesto Donadello",
+      "Certidão de Ivanildo João Donadello",
+      "Certidão de Odair José Donadello",
+      "Sua certidão de nascimento",
+      "Certidões de casamento da linha",
       "Certidões de naturalização/não naturalização conforme estratégia",
-      "Traduções","Apostilamentos",
-      "Documentação judicial/advogado, se aplicável","Acompanhar andamento"
+      "Traduções",
+      "Apostilamentos",
+      "Documentação judicial/advogado, se aplicável",
+      "Acompanhar andamento"
     ]
   },
 
@@ -128,23 +153,33 @@ const sections = [
     desc:"Linha do tempo sugerida.",
     tasks:[
       "JAN–MAR: escolher cursos e acompanhar editais",
-      "JAN–MAR: fortalecer italiano","MAR–MAI: candidaturas",
-      "ABR–JUN: carta de admissão/matrícula","MAI–JUL: traduções e apostilas",
-      "MAI–JUL: comprovação financeira","JUN–AGO: moradia e seguro",
-      "JUN–SET: pedido do visto","JUL–OUT: procedimento do Carlos",
-      "AGO–DEZ: viagem","Após chegada: permesso e registros"
+      "JAN–MAR: fortalecer italiano",
+      "MAR–MAI: candidaturas",
+      "ABR–JUN: carta de admissão/matrícula",
+      "MAI–JUL: traduções e apostilas",
+      "MAI–JUL: comprovação financeira",
+      "JUN–AGO: moradia e seguro",
+      "JUN–SET: pedido do visto",
+      "JUL–OUT: procedimento do Carlos",
+      "AGO–DEZ: viagem",
+      "Após chegada: permesso e registros"
     ]
   }
 ];
 
 // ============================================================
-// CONFIGURAÇÃO
+// CHAVES
 // ============================================================
 
-const STORAGE_KEY = "italia-sync-v3";
+const STORAGE_KEY_PREFIX = "italia-sync-v4";
 const ACTIVE_KEY = "italia-active";
 
-let active = localStorage.getItem(ACTIVE_KEY) || "ester";
+// ============================================================
+// ESTADO
+// ============================================================
+
+let active =
+  localStorage.getItem(ACTIVE_KEY) || "ester";
 
 let state = {
   tasks:{},
@@ -154,7 +189,6 @@ let state = {
 };
 
 let user = null;
-let activeProfile = null;
 let cloudTimer = null;
 let sb = null;
 
@@ -167,20 +201,32 @@ function $(selector){
 }
 
 function esc(value){
-  return String(value ?? "").replace(/[&<>"']/g,function(char){
-    return {
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[char];
-  });
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    function(char){
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[char];
+    }
+  );
 }
 
 // ============================================================
-// ESTADO LOCAL
+// STORAGE POR USUÁRIO
 // ============================================================
+
+function getStorageKey(userId){
+
+  if(!userId){
+    return STORAGE_KEY_PREFIX + "-guest";
+  }
+
+  return STORAGE_KEY_PREFIX + "-" + userId;
+}
 
 function initState(){
 
@@ -188,10 +234,13 @@ function initState(){
 
     section.tasks.forEach(function(_,index){
 
-      const key = section.id + "-" + index;
+      const key =
+        section.id + "-" + index;
 
       if(typeof state.tasks[key] !== "boolean"){
+
         state.tasks[key] = false;
+
       }
 
     });
@@ -200,21 +249,41 @@ function initState(){
 
 }
 
-function loadLocal(){
+function loadUserLocal(userId){
 
   try{
 
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey(userId);
+
+    const saved =
+      localStorage.getItem(key);
 
     if(saved){
 
-      const parsed = JSON.parse(saved);
+      const parsed =
+        JSON.parse(saved);
 
       state = {
+
         tasks:parsed.tasks || {},
+
         notes:parsed.notes || {},
-        goal:Number(parsed.goal) || 18000,
-        saved:Number(parsed.saved) || 0
+
+        goal:
+          Number(parsed.goal) || 18000,
+
+        saved:
+          Number(parsed.saved) || 0
+
+      };
+
+    }else{
+
+      state = {
+        tasks:{},
+        notes:{},
+        goal:18000,
+        saved:0
       };
 
     }
@@ -226,6 +295,13 @@ function loadLocal(){
       error
     );
 
+    state = {
+      tasks:{},
+      notes:{},
+      goal:18000,
+      saved:0
+    };
+
   }
 
   initState();
@@ -236,8 +312,13 @@ function localSave(){
 
   try{
 
+    const key =
+      getStorageKey(
+        user?.id || null
+      );
+
     localStorage.setItem(
-      STORAGE_KEY,
+      key,
       JSON.stringify(state)
     );
 
@@ -252,17 +333,27 @@ function localSave(){
 
 }
 
+// ============================================================
+// TODAS AS TAREFAS
+// ============================================================
+
 function allKeys(){
 
-  return sections.flatMap(function(section){
+  return sections.flatMap(
+    function(section){
 
-    return section.tasks.map(function(_,index){
+      return section.tasks.map(
+        function(_,index){
 
-      return section.id + "-" + index;
+          return section.id +
+            "-" +
+            index;
 
-    });
+        }
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -302,19 +393,25 @@ function render(){
 
   }
 
-  const keys = allKeys();
+  const keys =
+    allKeys();
 
-  const done = keys.filter(function(key){
+  const done =
+    keys.filter(
+      function(key){
 
-    return state.tasks[key] === true;
+        return state.tasks[key] === true;
 
-  }).length;
+      }
+    ).length;
 
-  const total = keys.length;
+  const total =
+    keys.length;
 
-  const percentage = total
-    ? Math.round(done / total * 100)
-    : 0;
+  const percentage =
+    total
+      ? Math.round(done / total * 100)
+      : 0;
 
   pct.textContent =
     percentage + "%";
@@ -323,7 +420,10 @@ function render(){
     percentage + "%";
 
   count.textContent =
-    done + " de " + total + " tarefas";
+    done +
+    " de " +
+    total +
+    " tarefas";
 
   goal.value =
     state.goal || 0;
@@ -331,63 +431,71 @@ function render(){
   saved.value =
     state.saved || 0;
 
-  const moneyPercentage = state.goal
-    ? Math.min(
-        100,
-        Math.round(
-          state.saved /
-          state.goal *
-          100
+  const moneyPercentage =
+    state.goal
+      ? Math.min(
+          100,
+          Math.round(
+            state.saved /
+            state.goal *
+            100
+          )
         )
-      )
-    : 0;
+      : 0;
 
   moneyPct.textContent =
     moneyPercentage + "%";
 
   tabs.innerHTML =
-    sections.map(function(section){
+    sections.map(
+      function(section){
 
-      return `
-        <button
-          type="button"
-          class="tab ${section.id === active ? "active" : ""}"
-          data-id="${section.id}">
-          ${section.icon} ${esc(section.title)}
-        </button>
-      `;
+        return `
+          <button
+            type="button"
+            class="tab ${section.id === active ? "active" : ""}"
+            data-id="${section.id}">
+            ${section.icon}
+            ${esc(section.title)}
+          </button>
+        `;
 
-    }).join("");
+      }
+    ).join("");
 
   document
     .querySelectorAll(".tab")
-    .forEach(function(button){
+    .forEach(
+      function(button){
 
-      button.addEventListener(
-        "click",
-        function(){
+        button.addEventListener(
+          "click",
+          function(){
 
-          active =
-            button.dataset.id;
+            active =
+              button.dataset.id;
 
-          localStorage.setItem(
-            ACTIVE_KEY,
-            active
-          );
+            localStorage.setItem(
+              ACTIVE_KEY,
+              active
+            );
 
-          render();
+            render();
 
-        }
-      );
+          }
+        );
 
-    });
+      }
+    );
 
   const section =
-    sections.find(function(item){
+    sections.find(
+      function(item){
 
-      return item.id === active;
+        return item.id === active;
 
-    }) || sections[0];
+      }
+    ) || sections[0];
 
   content.innerHTML = `
 
@@ -406,41 +514,48 @@ function render(){
 
     <div class="taskCard">
 
-      ${section.tasks.map(function(label,index){
+      ${section.tasks.map(
+        function(label,index){
 
-        const key =
-          section.id + "-" + index;
+          const key =
+            section.id +
+            "-" +
+            index;
 
-        const checked =
-          state.tasks[key] === true;
+          const checked =
+            state.tasks[key] === true;
 
-        return `
+          return `
 
-          <label class="task">
+            <label class="task">
 
-            <input
-              type="checkbox"
-              data-key="${key}"
-              ${checked ? "checked" : ""}>
+              <input
+                type="checkbox"
+                data-key="${key}"
+                ${checked ? "checked" : ""}
+              >
 
-            <span>
+              <span>
 
-              <b class="${checked ? "done" : ""}">
-                ${esc(label)}
-              </b>
+                <b class="${checked ? "done" : ""}">
+                  ${esc(label)}
+                </b>
 
-              <textarea
-                data-note="${key}"
-                placeholder="Observações, prazo, valor, link..."
-              >${esc(state.notes[key] || "")}</textarea>
+                <textarea
+                  data-note="${key}"
+                  placeholder="Observações, prazo, valor, link..."
+                >${esc(
+                  state.notes[key] || ""
+                )}</textarea>
 
-            </span>
+              </span>
 
-          </label>
+            </label>
 
-        `;
+          `;
 
-      }).join("")}
+        }
+      ).join("")}
 
     </div>
 
@@ -448,44 +563,51 @@ function render(){
 
   document
     .querySelectorAll("[data-key]")
-    .forEach(function(checkbox){
+    .forEach(
+      function(checkbox){
 
-      checkbox.addEventListener(
-        "change",
-        function(){
+        checkbox.addEventListener(
+          "change",
+          function(){
 
-          state.tasks[
-            checkbox.dataset.key
-          ] = checkbox.checked;
+            state.tasks[
+              checkbox.dataset.key
+            ] = checkbox.checked;
 
-          localSave();
-          render();
-          queueCloudSave();
+            localSave();
 
-        }
-      );
+            render();
 
-    });
+            queueCloudSave();
+
+          }
+        );
+
+      }
+    );
 
   document
     .querySelectorAll("[data-note]")
-    .forEach(function(textarea){
+    .forEach(
+      function(textarea){
 
-      textarea.addEventListener(
-        "input",
-        function(){
+        textarea.addEventListener(
+          "input",
+          function(){
 
-          state.notes[
-            textarea.dataset.note
-          ] = textarea.value;
+            state.notes[
+              textarea.dataset.note
+            ] = textarea.value;
 
-          localSave();
-          queueCloudSave();
+            localSave();
 
-        }
-      );
+            queueCloudSave();
 
-    });
+          }
+        );
+
+      }
+    );
 
 }
 
@@ -538,23 +660,37 @@ function initializeSupabase(){
 }
 
 // ============================================================
+// ATUALIZAR STATUS
+// ============================================================
+
+function setSyncStatus(text){
+
+  const status =
+    $("#syncStatus");
+
+  if(status){
+
+    status.textContent =
+      text;
+
+  }
+
+}
+
+// ============================================================
 // AUTENTICAÇÃO
 // ============================================================
 
 async function refreshAuth(){
-
-  const status =
-    $("#syncStatus");
 
   const loginButton =
     $("#loginBtn");
 
   if(!sb){
 
-    if(status){
-      status.textContent =
-        "● Local";
-    }
+    setSyncStatus(
+      "● Local"
+    );
 
     return;
 
@@ -570,37 +706,31 @@ async function refreshAuth(){
 
     if(user){
 
-      if(status){
-        status.textContent =
-          "● Sincronizado";
-      }
-
       if(loginButton){
 
         loginButton.textContent =
-          activeProfile === "ester"
-            ? "Ester 👩"
-            : "Carlos 👨";
+          "Minha conta";
 
       }
+
+      setSyncStatus(
+        "● Carregando…"
+      );
 
       await pullCloud();
 
     }else{
 
-      if(status){
-
-        status.textContent =
-          "● Não conectado";
-
-      }
-
       if(loginButton){
 
         loginButton.textContent =
-          "Entrar";
+          "Entrar / Criar conta";
 
       }
+
+      setSyncStatus(
+        "● Não conectado"
+      );
 
     }
 
@@ -611,17 +741,16 @@ async function refreshAuth(){
       error
     );
 
-    if(status){
-      status.textContent =
-        "● Não conectado";
-    }
+    setSyncStatus(
+      "● Não conectado"
+    );
 
   }
 
 }
 
 // ============================================================
-// CARREGAR DADOS DA NUVEM
+// CARREGAR DA NUVEM
 // ============================================================
 
 async function pullCloud(){
@@ -632,7 +761,23 @@ async function pullCloud(){
 
   }
 
+  const currentUserId =
+    user.id;
+
   try{
+
+    /*
+      IMPORTANTE:
+
+      Primeiro tentamos buscar a nuvem.
+
+      Se existir registro:
+      NUVEM ganha prioridade.
+
+      Assim o armazenamento local antigo
+      não consegue sobrescrever os dados
+      corretos do Supabase.
+    */
 
     const result =
       await sb
@@ -640,15 +785,27 @@ async function pullCloud(){
         .select("data")
         .eq(
           "user_id",
-          user.id
+          currentUserId
         )
         .maybeSingle();
 
     if(result.error){
 
       console.error(
-        "Erro ao carregar:",
+        "Erro ao carregar da nuvem:",
         result.error
+      );
+
+      loadUserLocal(
+        currentUserId
+      );
+
+      localSave();
+
+      render();
+
+      setSyncStatus(
+        "● Erro ao carregar"
       );
 
       return;
@@ -657,31 +814,70 @@ async function pullCloud(){
 
     if(result.data?.data){
 
+      const cloudData =
+        result.data.data;
+
       state = {
 
         tasks:
-          result.data.data.tasks || {},
+          cloudData.tasks || {},
 
         notes:
-          result.data.data.notes || {},
+          cloudData.notes || {},
 
         goal:
           Number(
-            result.data.data.goal
+            cloudData.goal
           ) || 18000,
 
         saved:
           Number(
-            result.data.data.saved
+            cloudData.saved
           ) || 0
 
       };
 
       initState();
+
+      /*
+        Depois de carregar da nuvem,
+        salvamos exatamente essa versão
+        no armazenamento local específico
+        deste usuário.
+      */
+
       localSave();
+
       render();
 
+      setSyncStatus(
+        "● Sincronizado"
+      );
+
+      console.log(
+        "☁️ Dados carregados da nuvem para:",
+        currentUserId
+      );
+
+      return;
+
     }
+
+    /*
+      Se não existir registro na nuvem,
+      podemos usar o armazenamento local
+      específico do usuário e criar o registro.
+    */
+
+    loadUserLocal(
+      currentUserId
+    );
+
+    localSave();
+
+    render();
+
+    await saveCloudNow();
 
   }catch(error){
 
@@ -690,12 +886,144 @@ async function pullCloud(){
       error
     );
 
+    loadUserLocal(
+      currentUserId
+    );
+
+    localSave();
+
+    render();
+
+    setSyncStatus(
+      "● Offline"
+    );
+
   }
 
 }
 
 // ============================================================
-// SALVAR NA NUVEM
+// SALVAR IMEDIATAMENTE NA NUVEM
+// ============================================================
+
+async function saveCloudNow(){
+
+  if(!sb || !user){
+
+    return false;
+
+  }
+
+  const currentUserId =
+    user.id;
+
+  try{
+
+    setSyncStatus(
+      "● Salvando…"
+    );
+
+    const payload = {
+
+      tasks:
+        state.tasks,
+
+      notes:
+        state.notes,
+
+      goal:
+        Number(state.goal) || 0,
+
+      saved:
+        Number(state.saved) || 0
+
+    };
+
+    const result =
+      await sb
+        .from("projects")
+        .upsert(
+          {
+            user_id:
+              currentUserId,
+
+            data:
+              payload,
+
+            updated_at:
+              new Date().toISOString()
+
+          },
+          {
+            onConflict:
+              "user_id"
+          }
+        );
+
+    /*
+      Verifica explicitamente o erro retornado
+      pelo Supabase.
+    */
+
+    if(result.error){
+
+      console.error(
+        "Erro ao salvar na nuvem:",
+        result.error
+      );
+
+      setSyncStatus(
+        "● Erro ao salvar"
+      );
+
+      return false;
+
+    }
+
+    /*
+      Só marcamos como sincronizado depois
+      que o Supabase respondeu com sucesso.
+    */
+
+    if(
+      user &&
+      user.id === currentUserId
+    ){
+
+      localSave();
+
+      setSyncStatus(
+        "● Sincronizado"
+      );
+
+    }
+
+    console.log(
+      "☁️ Dados salvos com sucesso:",
+      currentUserId
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Erro cloud save:",
+      error
+    );
+
+    setSyncStatus(
+      "● Erro ao salvar"
+    );
+
+    return false;
+
+  }
+
+}
+
+// ============================================================
+// FILA DE SINCRONIZAÇÃO
 // ============================================================
 
 function queueCloudSave(){
@@ -706,105 +1034,32 @@ function queueCloudSave(){
 
   }
 
-  clearTimeout(cloudTimer);
+  clearTimeout(
+    cloudTimer
+  );
+
+  const userIdAtQueue =
+    user.id;
 
   cloudTimer =
     setTimeout(
       async function(){
 
-        const status =
-          $("#syncStatus");
+        /*
+          Se o usuário mudou enquanto
+          esperávamos o timer, cancelamos.
+        */
 
-        if(status){
+        if(
+          !user ||
+          user.id !== userIdAtQueue
+        ){
 
-          status.textContent =
-            "● Salvando…";
-
-        }
-
-        try{
-
-          const payload = {
-
-            tasks:
-              state.tasks,
-
-            notes:
-              state.notes,
-
-            goal:
-              Number(
-                state.goal
-              ) || 0,
-
-            saved:
-              Number(
-                state.saved
-              ) || 0
-
-          };
-
-          const result =
-            await sb
-              .from("projects")
-              .upsert(
-                {
-                  user_id:
-                    user.id,
-
-                  data:
-                    payload,
-
-                  updated_at:
-                    new Date()
-                      .toISOString()
-                },
-                {
-                  onConflict:
-                    "user_id"
-                }
-              );
-
-          if(result.error){
-
-            console.error(
-              "Erro ao salvar:",
-              result.error
-            );
-
-            if(status){
-
-              status.textContent =
-                "● Erro ao salvar";
-
-            }
-
-          }else{
-
-            if(status){
-
-              status.textContent =
-                "● Sincronizado";
-
-            }
-
-          }
-
-        }catch(error){
-
-          console.error(
-            "Erro cloud save:",
-            error
-          );
-
-          if(status){
-
-            status.textContent =
-              "● Erro ao salvar";
-
-          }
+          return;
 
         }
+
+        await saveCloudNow();
 
       },
       700
@@ -813,7 +1068,7 @@ function queueCloudSave(){
 }
 
 // ============================================================
-// MODAL DE LOGIN POR PIN
+// MODAL DE LOGIN
 // ============================================================
 
 function createAuthPanel(){
@@ -852,70 +1107,37 @@ function createAuthPanel(){
         box-shadow:0 20px 60px rgba(0,0,0,.25);
       ">
 
-        <h2 style="margin-top:0;">
-          🇮🇹 Projeto Itália 2027
+        <h2 id="authTitle">
+          🇮🇹 Entrar no Projeto Itália
         </h2>
 
         <p id="authDescription">
-          Quem está entrando?
+          Entre com seu e-mail e senha.
         </p>
 
-        <div style="
-          display:flex;
-          gap:10px;
-          margin:15px 0;
-        ">
-
-          <button
-            id="profileEster"
-            type="button"
-            style="
-              flex:1;
-              padding:14px;
-              cursor:pointer;
-              border-radius:12px;
-              border:1px solid #ddd;
-              background:#f7f7f7;
-              font-size:16px;
-            "
-          >
-            👩 Ester
-          </button>
-
-          <button
-            id="profileCarlos"
-            type="button"
-            style="
-              flex:1;
-              padding:14px;
-              cursor:pointer;
-              border-radius:12px;
-              border:1px solid #ddd;
-              background:#f7f7f7;
-              font-size:16px;
-            "
-          >
-            👨 Carlos
-          </button>
-
-        </div>
+        <input
+          id="authEmail"
+          type="email"
+          placeholder="Seu e-mail"
+          autocomplete="email"
+          style="
+            width:100%;
+            padding:12px;
+            margin:8px 0;
+            box-sizing:border-box;
+          "
+        >
 
         <input
           id="authPassword"
           type="password"
-          inputmode="numeric"
-          maxlength="6"
-          pattern="[0-9]*"
-          placeholder="PIN de 6 dígitos"
+          placeholder="Senha"
           autocomplete="current-password"
           style="
             width:100%;
-            padding:14px;
+            padding:12px;
             margin:8px 0;
             box-sizing:border-box;
-            font-size:20px;
-            text-align:center;
-            letter-spacing:6px;
           "
         >
 
@@ -924,15 +1146,40 @@ function createAuthPanel(){
           type="button"
           style="
             width:100%;
-            padding:14px;
-            margin-top:10px;
+            padding:13px;
+            margin-top:8px;
             cursor:pointer;
-            border-radius:12px;
-            border:0;
-            font-size:16px;
           "
         >
           Entrar
+        </button>
+
+        <button
+          id="authCreate"
+          type="button"
+          style="
+            width:100%;
+            padding:13px;
+            margin-top:8px;
+            cursor:pointer;
+          "
+        >
+          Criar conta
+        </button>
+
+        <button
+          id="authForgot"
+          type="button"
+          style="
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            background:none;
+            border:0;
+            cursor:pointer;
+          "
+        >
+          Esqueci minha senha
         </button>
 
         <button
@@ -941,22 +1188,14 @@ function createAuthPanel(){
           style="
             width:100%;
             padding:10px;
-            margin-top:8px;
-            background:none;
-            border:0;
+            margin-top:5px;
             cursor:pointer;
           "
         >
           Fechar
         </button>
 
-        <p
-          id="authMessage"
-          style="
-            text-align:center;
-            min-height:20px;
-          "
-        ></p>
+        <p id="authMessage"></p>
 
       </div>
 
@@ -964,66 +1203,9 @@ function createAuthPanel(){
 
   `;
 
-  document.body.appendChild(panel);
-
-  let selectedProfile = null;
-
-  function selectProfile(profile){
-
-    selectedProfile =
-      profile;
-
-    const esterButton =
-      $("#profileEster");
-
-    const carlosButton =
-      $("#profileCarlos");
-
-    if(esterButton){
-
-      esterButton.style.background =
-        profile === "ester"
-          ? "#e8f0ff"
-          : "#f7f7f7";
-
-    }
-
-    if(carlosButton){
-
-      carlosButton.style.background =
-        profile === "carlos"
-          ? "#e8f0ff"
-          : "#f7f7f7";
-
-    }
-
-    const description =
-      $("#authDescription");
-
-    if(description){
-
-      description.textContent =
-        profile === "ester"
-          ? "👩 Ester selecionada. Digite seu PIN."
-          : "👨 Carlos selecionado. Digite seu PIN.";
-
-    }
-
-  }
-
-  $("#profileEster").onclick =
-    function(){
-
-      selectProfile("ester");
-
-    };
-
-  $("#profileCarlos").onclick =
-    function(){
-
-      selectProfile("carlos");
-
-    };
+  document.body.appendChild(
+    panel
+  );
 
   $("#authClose").onclick =
     function(){
@@ -1033,48 +1215,24 @@ function createAuthPanel(){
     };
 
   $("#authSubmit").onclick =
-    function(){
+    loginWithPassword;
 
-      loginWithPin(
-        selectedProfile
-      );
+  $("#authCreate").onclick =
+    createAccount;
 
-    };
-
-  $("#authPassword").addEventListener(
-    "input",
-    function(){
-
-      this.value =
-        this.value
-          .replace(/\D/g,"")
-          .slice(0,6);
-
-    }
-  );
-
-  $("#authPassword").addEventListener(
-    "keydown",
-    function(event){
-
-      if(event.key === "Enter"){
-
-        loginWithPin(
-          selectedProfile
-        );
-
-      }
-
-    }
-  );
+  $("#authForgot").onclick =
+    resetPassword;
 
 }
 
 // ============================================================
-// LOGIN COM PIN
+// LOGIN
 // ============================================================
 
-async function loginWithPin(profile){
+async function loginWithPassword(){
+
+  const email =
+    $("#authEmail")?.value.trim();
 
   const password =
     $("#authPassword")?.value;
@@ -1082,38 +1240,12 @@ async function loginWithPin(profile){
   const message =
     $("#authMessage");
 
-  if(!profile){
+  if(!email || !password){
 
     if(message){
 
       message.textContent =
-        "Escolha Ester ou Carlos.";
-
-    }
-
-    return;
-
-  }
-
-  if(!password){
-
-    if(message){
-
-      message.textContent =
-        "Digite seu PIN.";
-
-    }
-
-    return;
-
-  }
-
-  if(!/^\d{6}$/.test(password)){
-
-    if(message){
-
-      message.textContent =
-        "O PIN precisa ter exatamente 6 números.";
+        "Digite seu e-mail e sua senha.";
 
     }
 
@@ -1123,66 +1255,38 @@ async function loginWithPin(profile){
 
   if(!sb){
 
-    if(message){
-
-      message.textContent =
-        "Supabase não está configurado.";
-
-    }
-
-    return;
-
-  }
-
-  const email =
-    AUTH_USERS[profile];
-
-  if(!email){
-
-    if(message){
-
-      message.textContent =
-        "Perfil não configurado.";
-
-    }
-
-    return;
-
-  }
-
-  if(message){
-
     message.textContent =
-      "Entrando…";
+      "Supabase não está configurado.";
+
+    return;
 
   }
+
+  message.textContent =
+    "Entrando…";
 
   try{
 
     const result =
-      await sb.auth.signInWithPassword({
+      await sb.auth.signInWithPassword(
+        {
+          email:
+            email,
 
-        email:
-          email,
-
-        password:
-          password
-
-      });
+          password:
+            password
+        }
+      );
 
     if(result.error){
 
       console.error(
-        "Erro login:",
+        "Erro de login:",
         result.error
       );
 
-      if(message){
-
-        message.textContent =
-          "PIN incorreto. Verifique o perfil e tente novamente.";
-
-      }
+      message.textContent =
+        result.error.message;
 
       return;
 
@@ -1191,20 +1295,15 @@ async function loginWithPin(profile){
     user =
       result.data.user;
 
-    activeProfile =
-      profile;
+    message.textContent =
+      "Login realizado!";
 
-    localStorage.setItem(
-      "italia-profile",
-      profile
-    );
+    /*
+      IMPORTANTE:
 
-    if(message){
-
-      message.textContent =
-        "Login realizado!";
-
-    }
+      Ao entrar, pullCloud() sempre consulta
+      primeiro o Supabase.
+    */
 
     await pullCloud();
 
@@ -1221,22 +1320,191 @@ async function loginWithPin(profile){
         }
 
       },
-      600
+      700
     );
 
   }catch(error){
 
     console.error(
-      "Erro ao entrar:",
       error
     );
 
-    if(message){
+    message.textContent =
+      "Não foi possível entrar. Verifique o e-mail e a senha.";
+
+  }
+
+}
+
+// ============================================================
+// CRIAR CONTA
+// ============================================================
+
+async function createAccount(){
+
+  const email =
+    $("#authEmail")?.value.trim();
+
+  const password =
+    $("#authPassword")?.value;
+
+  const message =
+    $("#authMessage");
+
+  if(!email || !password){
+
+    message.textContent =
+      "Digite seu e-mail e escolha uma senha.";
+
+    return;
+
+  }
+
+  if(password.length < 6){
+
+    message.textContent =
+      "A senha precisa ter pelo menos 6 caracteres.";
+
+    return;
+
+  }
+
+  if(!sb){
+
+    message.textContent =
+      "Supabase não está configurado.";
+
+    return;
+
+  }
+
+  message.textContent =
+    "Criando conta…";
+
+  try{
+
+    const result =
+      await sb.auth.signUp(
+        {
+          email:
+            email,
+
+          password:
+            password,
+
+          options:{
+            emailRedirectTo:
+              window.location.origin +
+              window.location.pathname
+          }
+
+        }
+      );
+
+    if(result.error){
 
       message.textContent =
-        "Não foi possível entrar. Verifique o PIN.";
+        result.error.message;
+
+      return;
 
     }
+
+    if(result.data.session){
+
+      user =
+        result.data.user;
+
+      message.textContent =
+        "Conta criada e login realizado!";
+
+      await pullCloud();
+
+    }else{
+
+      message.textContent =
+        "Conta criada! Confira seu e-mail para confirmar a conta.";
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    message.textContent =
+      "Não foi possível criar a conta.";
+
+  }
+
+}
+
+// ============================================================
+// RECUPERAÇÃO DE SENHA
+// ============================================================
+
+async function resetPassword(){
+
+  const email =
+    $("#authEmail")?.value.trim();
+
+  const message =
+    $("#authMessage");
+
+  if(!email){
+
+    message.textContent =
+      "Digite seu e-mail primeiro.";
+
+    return;
+
+  }
+
+  if(!sb){
+
+    message.textContent =
+      "Supabase não está configurado.";
+
+    return;
+
+  }
+
+  message.textContent =
+    "Enviando recuperação de senha…";
+
+  try{
+
+    const result =
+      await sb.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            window.location.origin +
+            window.location.pathname
+        }
+      );
+
+    if(result.error){
+
+      message.textContent =
+        result.error.message;
+
+      return;
+
+    }
+
+    message.textContent =
+      "Se o e-mail estiver cadastrado, enviaremos um link para redefinir sua senha.";
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    message.textContent =
+      "Não foi possível solicitar a recuperação.";
 
   }
 
@@ -1254,6 +1522,18 @@ async function logout(){
 
   }
 
+  /*
+    Cancela qualquer salvamento pendente
+    antes de trocar de usuário.
+  */
+
+  clearTimeout(
+    cloudTimer
+  );
+
+  cloudTimer =
+    null;
+
   try{
 
     await sb.auth.signOut();
@@ -1261,30 +1541,38 @@ async function logout(){
     user =
       null;
 
-    activeProfile =
-      null;
+    /*
+      Depois do logout, não mantemos na memória
+      os dados do usuário anterior.
+    */
 
-    localStorage.removeItem(
-      "italia-profile"
+    state = {
+
+      tasks:{},
+
+      notes:{},
+
+      goal:18000,
+
+      saved:0
+
+    };
+
+    initState();
+
+    render();
+
+    setSyncStatus(
+      "● Não conectado"
     );
-
-    const status =
-      $("#syncStatus");
 
     const button =
       $("#loginBtn");
 
-    if(status){
-
-      status.textContent =
-        "● Não conectado";
-
-    }
-
     if(button){
 
       button.textContent =
-        "Entrar";
+        "Entrar / Criar conta";
 
     }
 
@@ -1300,7 +1588,7 @@ async function logout(){
 }
 
 // ============================================================
-// BOTÃO DE LOGIN
+// BOTÃO LOGIN
 // ============================================================
 
 function setupLoginButton(){
@@ -1319,15 +1607,10 @@ function setupLoginButton(){
 
       if(user){
 
-        const profileName =
-          activeProfile === "ester"
-            ? "Ester 👩"
-            : "Carlos 👨";
-
         const choice =
           confirm(
             "Você está conectado como " +
-            profileName +
+            user.email +
             ".\n\nDeseja sair da conta?"
           );
 
@@ -1366,12 +1649,12 @@ function setupFinance(){
       function(){
 
         state.goal =
-          Number(
-            goal.value
-          ) || 0;
+          Number(goal.value) || 0;
 
         localSave();
+
         render();
+
         queueCloudSave();
 
       }
@@ -1386,12 +1669,12 @@ function setupFinance(){
       function(){
 
         state.saved =
-          Number(
-            saved.value
-          ) || 0;
+          Number(saved.value) || 0;
 
         localSave();
+
         render();
+
         queueCloudSave();
 
       }
@@ -1411,12 +1694,25 @@ function startApp(){
     "🇮🇹 Projeto Itália 2027 iniciado."
   );
 
-  loadLocal();
+  /*
+    Estado inicial neutro.
+    Não carregamos mais o antigo
+    italia-sync-v3 compartilhado.
+  */
 
-  activeProfile =
-    localStorage.getItem(
-      "italia-profile"
-    );
+  state = {
+
+    tasks:{},
+
+    notes:{},
+
+    goal:18000,
+
+    saved:0
+
+  };
+
+  initState();
 
   sb =
     initializeSupabase();
@@ -1442,7 +1738,22 @@ function startApp(){
         user =
           session?.user || null;
 
-        refreshAuth();
+        /*
+          Evita tentar carregar dados de forma
+          incorreta durante INITIAL_SESSION.
+        */
+
+        if(user){
+
+          refreshAuth();
+
+        }else{
+
+          setSyncStatus(
+            "● Não conectado"
+          );
+
+        }
 
       }
     );
