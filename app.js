@@ -1,7 +1,27 @@
 alert("NOVO APP.JS CARREGADO!");
+
 // ============================================================
 // PROJETO ITÁLIA 2027
-// APP.JS — LOGIN POR E-MAIL + SENHA
+// APP.JS — LOGIN POR PERFIL + PIN DE 6 DÍGITOS
+// ============================================================
+
+// ============================================================
+// CONTAS DO PROJETO
+// ============================================================
+//
+// Os e-mails são usados somente internamente para o Supabase.
+// O usuário verá apenas Ester / Carlos + PIN.
+//
+// NÃO coloque os PINs aqui.
+//
+
+const AUTH_USERS = {
+  ester: "estermarina6174@gmail.com",
+  carlos: "viniciusduarth@gmail.com"
+};
+
+// ============================================================
+// SEÇÕES
 // ============================================================
 
 const sections = [
@@ -22,6 +42,7 @@ const sections = [
       "Passagem/itinerário","Pedido do visto","Permesso di soggiorno após chegada"
     ]
   },
+
   {
     id:"carlos",
     title:"Carlos",
@@ -39,6 +60,7 @@ const sections = [
       "Codice fiscale","Currículo em italiano","Comprovantes de experiência profissional"
     ]
   },
+
   {
     id:"docs",
     title:"Documentos",
@@ -53,6 +75,7 @@ const sections = [
       "Fazer cópias físicas","Guardar backup na nuvem"
     ]
   },
+
   {
     id:"finance",
     title:"Financeiro",
@@ -66,6 +89,7 @@ const sections = [
       "Planejar taxas e traduções","Planejar custo de vida inicial"
     ]
   },
+
   {
     id:"arrival",
     title:"Chegada",
@@ -81,6 +105,7 @@ const sections = [
       "Pesquisar emprego para o Carlos"
     ]
   },
+
   {
     id:"citizenship",
     title:"Cidadania",
@@ -95,6 +120,7 @@ const sections = [
       "Documentação judicial/advogado, se aplicável","Acompanhar andamento"
     ]
   },
+
   {
     id:"timeline",
     title:"2027",
@@ -111,6 +137,10 @@ const sections = [
   }
 ];
 
+// ============================================================
+// CONFIGURAÇÃO
+// ============================================================
+
 const STORAGE_KEY = "italia-sync-v3";
 const ACTIVE_KEY = "italia-active";
 
@@ -124,6 +154,7 @@ let state = {
 };
 
 let user = null;
+let activeProfile = null;
 let cloudTimer = null;
 let sb = null;
 
@@ -152,22 +183,31 @@ function esc(value){
 // ============================================================
 
 function initState(){
+
   sections.forEach(function(section){
+
     section.tasks.forEach(function(_,index){
+
       const key = section.id + "-" + index;
 
       if(typeof state.tasks[key] !== "boolean"){
         state.tasks[key] = false;
       }
+
     });
+
   });
+
 }
 
 function loadLocal(){
+
   try{
+
     const saved = localStorage.getItem(STORAGE_KEY);
 
     if(saved){
+
       const parsed = JSON.parse(saved);
 
       state = {
@@ -176,28 +216,54 @@ function loadLocal(){
         goal:Number(parsed.goal) || 18000,
         saved:Number(parsed.saved) || 0
       };
+
     }
+
   }catch(error){
-    console.warn("Erro ao carregar dados locais:",error);
+
+    console.warn(
+      "Erro ao carregar dados locais:",
+      error
+    );
+
   }
 
   initState();
+
 }
 
 function localSave(){
+
   try{
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(state)
+    );
+
   }catch(error){
-    console.warn("Erro ao salvar localmente:",error);
+
+    console.warn(
+      "Erro ao salvar localmente:",
+      error
+    );
+
   }
+
 }
 
 function allKeys(){
+
   return sections.flatMap(function(section){
+
     return section.tasks.map(function(_,index){
+
       return section.id + "-" + index;
+
     });
+
   });
+
 }
 
 // ============================================================
@@ -217,15 +283,31 @@ function render(){
   const tabs = $("#tabs");
   const content = $("#content");
 
-  if(!count || !pct || !bar || !goal || !saved || !moneyPct || !tabs || !content){
-    console.warn("HTML ainda não está pronto.");
+  if(
+    !count ||
+    !pct ||
+    !bar ||
+    !goal ||
+    !saved ||
+    !moneyPct ||
+    !tabs ||
+    !content
+  ){
+
+    console.warn(
+      "HTML ainda não está pronto."
+    );
+
     return;
+
   }
 
   const keys = allKeys();
 
   const done = keys.filter(function(key){
+
     return state.tasks[key] === true;
+
   }).length;
 
   const total = keys.length;
@@ -234,61 +316,106 @@ function render(){
     ? Math.round(done / total * 100)
     : 0;
 
-  pct.textContent = percentage + "%";
-  bar.style.width = percentage + "%";
-  count.textContent = done + " de " + total + " tarefas";
+  pct.textContent =
+    percentage + "%";
 
-  goal.value = state.goal || 0;
-  saved.value = state.saved || 0;
+  bar.style.width =
+    percentage + "%";
+
+  count.textContent =
+    done + " de " + total + " tarefas";
+
+  goal.value =
+    state.goal || 0;
+
+  saved.value =
+    state.saved || 0;
 
   const moneyPercentage = state.goal
-    ? Math.min(100,Math.round(state.saved / state.goal * 100))
+    ? Math.min(
+        100,
+        Math.round(
+          state.saved /
+          state.goal *
+          100
+        )
+      )
     : 0;
 
-  moneyPct.textContent = moneyPercentage + "%";
+  moneyPct.textContent =
+    moneyPercentage + "%";
 
-  tabs.innerHTML = sections.map(function(section){
-    return `
-      <button
-        type="button"
-        class="tab ${section.id === active ? "active" : ""}"
-        data-id="${section.id}">
-        ${section.icon} ${esc(section.title)}
-      </button>
-    `;
-  }).join("");
+  tabs.innerHTML =
+    sections.map(function(section){
 
-  document.querySelectorAll(".tab").forEach(function(button){
+      return `
+        <button
+          type="button"
+          class="tab ${section.id === active ? "active" : ""}"
+          data-id="${section.id}">
+          ${section.icon} ${esc(section.title)}
+        </button>
+      `;
 
-    button.addEventListener("click",function(){
+    }).join("");
 
-      active = button.dataset.id;
+  document
+    .querySelectorAll(".tab")
+    .forEach(function(button){
 
-      localStorage.setItem(ACTIVE_KEY,active);
+      button.addEventListener(
+        "click",
+        function(){
 
-      render();
+          active =
+            button.dataset.id;
+
+          localStorage.setItem(
+            ACTIVE_KEY,
+            active
+          );
+
+          render();
+
+        }
+      );
+
     });
-
-  });
 
   const section =
     sections.find(function(item){
+
       return item.id === active;
+
     }) || sections[0];
 
   content.innerHTML = `
+
     <div class="sectionHead">
-      <h2>${section.icon} ${esc(section.title)}</h2>
-      <p>${esc(section.desc)}</p>
+
+      <h2>
+        ${section.icon}
+        ${esc(section.title)}
+      </h2>
+
+      <p>
+        ${esc(section.desc)}
+      </p>
+
     </div>
 
     <div class="taskCard">
+
       ${section.tasks.map(function(label,index){
 
-        const key = section.id + "-" + index;
-        const checked = state.tasks[key] === true;
+        const key =
+          section.id + "-" + index;
+
+        const checked =
+          state.tasks[key] === true;
 
         return `
+
           <label class="task">
 
             <input
@@ -310,38 +437,56 @@ function render(){
             </span>
 
           </label>
+
         `;
 
       }).join("")}
+
     </div>
+
   `;
 
-  document.querySelectorAll("[data-key]").forEach(function(checkbox){
+  document
+    .querySelectorAll("[data-key]")
+    .forEach(function(checkbox){
 
-    checkbox.addEventListener("change",function(){
+      checkbox.addEventListener(
+        "change",
+        function(){
 
-      state.tasks[checkbox.dataset.key] = checkbox.checked;
+          state.tasks[
+            checkbox.dataset.key
+          ] = checkbox.checked;
 
-      localSave();
-      render();
-      queueCloudSave();
+          localSave();
+          render();
+          queueCloudSave();
 
-    });
-
-  });
-
-  document.querySelectorAll("[data-note]").forEach(function(textarea){
-
-    textarea.addEventListener("input",function(){
-
-      state.notes[textarea.dataset.note] = textarea.value;
-
-      localSave();
-      queueCloudSave();
+        }
+      );
 
     });
 
-  });
+  document
+    .querySelectorAll("[data-note]")
+    .forEach(function(textarea){
+
+      textarea.addEventListener(
+        "input",
+        function(){
+
+          state.notes[
+            textarea.dataset.note
+          ] = textarea.value;
+
+          localSave();
+          queueCloudSave();
+
+        }
+      );
+
+    });
+
 }
 
 // ============================================================
@@ -358,8 +503,13 @@ function initializeSupabase(){
       !window.SUPABASE_ANON_KEY ||
       window.SUPABASE_URL.includes("COLE_AQUI")
     ){
-      console.warn("Supabase não configurado.");
+
+      console.warn(
+        "Supabase não configurado."
+      );
+
       return null;
+
     }
 
     return window.supabase.createClient(
@@ -376,10 +526,15 @@ function initializeSupabase(){
 
   }catch(error){
 
-    console.error("Erro Supabase:",error);
+    console.error(
+      "Erro Supabase:",
+      error
+    );
 
     return null;
+
   }
+
 }
 
 // ============================================================
@@ -388,32 +543,45 @@ function initializeSupabase(){
 
 async function refreshAuth(){
 
-  const status = $("#syncStatus");
-  const loginButton = $("#loginBtn");
+  const status =
+    $("#syncStatus");
+
+  const loginButton =
+    $("#loginBtn");
 
   if(!sb){
 
     if(status){
-      status.textContent = "● Local";
+      status.textContent =
+        "● Local";
     }
 
     return;
+
   }
 
   try{
 
-    const result = await sb.auth.getUser();
+    const result =
+      await sb.auth.getUser();
 
-    user = result.data?.user || null;
+    user =
+      result.data?.user || null;
 
     if(user){
 
       if(status){
-        status.textContent = "● Sincronizado";
+        status.textContent =
+          "● Sincronizado";
       }
 
       if(loginButton){
-        loginButton.textContent = "Minha conta";
+
+        loginButton.textContent =
+          activeProfile === "ester"
+            ? "Ester 👩"
+            : "Carlos 👨";
+
       }
 
       await pullCloud();
@@ -421,22 +589,35 @@ async function refreshAuth(){
     }else{
 
       if(status){
-        status.textContent = "● Não conectado";
+
+        status.textContent =
+          "● Não conectado";
+
       }
 
       if(loginButton){
-        loginButton.textContent = "Entrar / Criar conta";
+
+        loginButton.textContent =
+          "Entrar";
+
       }
+
     }
 
   }catch(error){
 
-    console.error("Erro ao verificar sessão:",error);
+    console.error(
+      "Erro ao verificar sessão:",
+      error
+    );
 
     if(status){
-      status.textContent = "● Não conectado";
+      status.textContent =
+        "● Não conectado";
     }
+
   }
+
 }
 
 // ============================================================
@@ -445,41 +626,72 @@ async function refreshAuth(){
 
 async function pullCloud(){
 
-  if(!sb || !user) return;
+  if(!sb || !user){
+
+    return;
+
+  }
 
   try{
 
-    const result = await sb
-      .from("projects")
-      .select("data")
-      .eq("user_id",user.id)
-      .maybeSingle();
+    const result =
+      await sb
+        .from("projects")
+        .select("data")
+        .eq(
+          "user_id",
+          user.id
+        )
+        .maybeSingle();
 
     if(result.error){
 
-      console.error("Erro ao carregar:",result.error);
+      console.error(
+        "Erro ao carregar:",
+        result.error
+      );
 
       return;
+
     }
 
     if(result.data?.data){
 
       state = {
-        tasks:result.data.data.tasks || {},
-        notes:result.data.data.notes || {},
-        goal:Number(result.data.data.goal) || 18000,
-        saved:Number(result.data.data.saved) || 0
+
+        tasks:
+          result.data.data.tasks || {},
+
+        notes:
+          result.data.data.notes || {},
+
+        goal:
+          Number(
+            result.data.data.goal
+          ) || 18000,
+
+        saved:
+          Number(
+            result.data.data.saved
+          ) || 0
+
       };
 
       initState();
       localSave();
       render();
+
     }
 
   }catch(error){
 
-    console.error("Erro cloud:",error);
+    console.error(
+      "Erro cloud:",
+      error
+    );
+
   }
+
 }
 
 // ============================================================
@@ -488,82 +700,138 @@ async function pullCloud(){
 
 function queueCloudSave(){
 
-  if(!sb || !user) return;
+  if(!sb || !user){
+
+    return;
+
+  }
 
   clearTimeout(cloudTimer);
 
-  cloudTimer = setTimeout(async function(){
+  cloudTimer =
+    setTimeout(
+      async function(){
 
-    const status = $("#syncStatus");
+        const status =
+          $("#syncStatus");
 
-    if(status){
-      status.textContent = "● Salvando…";
-    }
+        if(status){
 
-    try{
+          status.textContent =
+            "● Salvando…";
 
-      const payload = {
-        tasks:state.tasks,
-        notes:state.notes,
-        goal:Number(state.goal) || 0,
-        saved:Number(state.saved) || 0
-      };
+        }
 
-      const result = await sb
-        .from("projects")
-        .upsert(
-          {
-            user_id:user.id,
-            data:payload,
-            updated_at:new Date().toISOString()
-          },
-          {
-            onConflict:"user_id"
+        try{
+
+          const payload = {
+
+            tasks:
+              state.tasks,
+
+            notes:
+              state.notes,
+
+            goal:
+              Number(
+                state.goal
+              ) || 0,
+
+            saved:
+              Number(
+                state.saved
+              ) || 0
+
+          };
+
+          const result =
+            await sb
+              .from("projects")
+              .upsert(
+                {
+                  user_id:
+                    user.id,
+
+                  data:
+                    payload,
+
+                  updated_at:
+                    new Date()
+                      .toISOString()
+                },
+                {
+                  onConflict:
+                    "user_id"
+                }
+              );
+
+          if(result.error){
+
+            console.error(
+              "Erro ao salvar:",
+              result.error
+            );
+
+            if(status){
+
+              status.textContent =
+                "● Erro ao salvar";
+
+            }
+
+          }else{
+
+            if(status){
+
+              status.textContent =
+                "● Sincronizado";
+
+            }
+
           }
-        );
 
-      if(result.error){
+        }catch(error){
 
-        console.error("Erro ao salvar:",result.error);
+          console.error(
+            "Erro cloud save:",
+            error
+          );
 
-        if(status){
-          status.textContent = "● Erro ao salvar";
+          if(status){
+
+            status.textContent =
+              "● Erro ao salvar";
+
+          }
+
         }
 
-      }else{
+      },
+      700
+    );
 
-        if(status){
-          status.textContent = "● Sincronizado";
-        }
-      }
-
-    }catch(error){
-
-      console.error("Erro cloud save:",error);
-
-      if(status){
-        status.textContent = "● Erro ao salvar";
-      }
-    }
-
-  },700);
 }
 
 // ============================================================
-// MODAL DE LOGIN
+// MODAL DE LOGIN POR PIN
 // ============================================================
 
 function createAuthPanel(){
 
   if($("#passwordAuthPanel")){
+
     return;
+
   }
 
-  const panel = document.createElement("div");
+  const panel =
+    document.createElement("div");
 
-  panel.id = "passwordAuthPanel";
+  panel.id =
+    "passwordAuthPanel";
 
   panel.innerHTML = `
+
     <div style="
       position:fixed;
       inset:0;
@@ -584,37 +852,70 @@ function createAuthPanel(){
         box-shadow:0 20px 60px rgba(0,0,0,.25);
       ">
 
-        <h2 id="authTitle">
-          🇮🇹 Entrar no Projeto Itália
+        <h2 style="margin-top:0;">
+          🇮🇹 Projeto Itália 2027
         </h2>
 
         <p id="authDescription">
-          Entre com seu e-mail e senha.
+          Quem está entrando?
         </p>
 
-        <input
-          id="authEmail"
-          type="email"
-          placeholder="Seu e-mail"
-          autocomplete="email"
-          style="
-            width:100%;
-            padding:12px;
-            margin:8px 0;
-            box-sizing:border-box;
-          "
-        >
+        <div style="
+          display:flex;
+          gap:10px;
+          margin:15px 0;
+        ">
+
+          <button
+            id="profileEster"
+            type="button"
+            style="
+              flex:1;
+              padding:14px;
+              cursor:pointer;
+              border-radius:12px;
+              border:1px solid #ddd;
+              background:#f7f7f7;
+              font-size:16px;
+            "
+          >
+            👩 Ester
+          </button>
+
+          <button
+            id="profileCarlos"
+            type="button"
+            style="
+              flex:1;
+              padding:14px;
+              cursor:pointer;
+              border-radius:12px;
+              border:1px solid #ddd;
+              background:#f7f7f7;
+              font-size:16px;
+            "
+          >
+            👨 Carlos
+          </button>
+
+        </div>
 
         <input
           id="authPassword"
           type="password"
-          placeholder="Senha"
+          inputmode="numeric"
+          maxlength="6"
+          pattern="[0-9]*"
+          placeholder="PIN de 6 dígitos"
           autocomplete="current-password"
           style="
             width:100%;
-            padding:12px;
+            padding:14px;
             margin:8px 0;
             box-sizing:border-box;
+            font-size:20px;
+            text-align:center;
+            letter-spacing:6px;
           "
         >
 
@@ -623,40 +924,15 @@ function createAuthPanel(){
           type="button"
           style="
             width:100%;
-            padding:13px;
-            margin-top:8px;
+            padding:14px;
+            margin-top:10px;
             cursor:pointer;
+            border-radius:12px;
+            border:0;
+            font-size:16px;
           "
         >
           Entrar
-        </button>
-
-        <button
-          id="authCreate"
-          type="button"
-          style="
-            width:100%;
-            padding:13px;
-            margin-top:8px;
-            cursor:pointer;
-          "
-        >
-          Criar conta
-        </button>
-
-        <button
-          id="authForgot"
-          type="button"
-          style="
-            width:100%;
-            padding:10px;
-            margin-top:5px;
-            background:none;
-            border:0;
-            cursor:pointer;
-          "
-        >
-          Esqueci minha senha
         </button>
 
         <button
@@ -665,237 +941,305 @@ function createAuthPanel(){
           style="
             width:100%;
             padding:10px;
-            margin-top:5px;
+            margin-top:8px;
+            background:none;
+            border:0;
             cursor:pointer;
           "
         >
           Fechar
         </button>
 
-        <p id="authMessage"></p>
+        <p
+          id="authMessage"
+          style="
+            text-align:center;
+            min-height:20px;
+          "
+        ></p>
 
       </div>
+
     </div>
+
   `;
 
   document.body.appendChild(panel);
 
-  $("#authClose").onclick = function(){
-    panel.remove();
-  };
+  let selectedProfile = null;
 
-  $("#authSubmit").onclick = loginWithPassword;
+  function selectProfile(profile){
 
-  $("#authCreate").onclick = createAccount;
+    selectedProfile =
+      profile;
 
-  $("#authForgot").onclick = resetPassword;
+    const esterButton =
+      $("#profileEster");
+
+    const carlosButton =
+      $("#profileCarlos");
+
+    if(esterButton){
+
+      esterButton.style.background =
+        profile === "ester"
+          ? "#e8f0ff"
+          : "#f7f7f7";
+
+    }
+
+    if(carlosButton){
+
+      carlosButton.style.background =
+        profile === "carlos"
+          ? "#e8f0ff"
+          : "#f7f7f7";
+
+    }
+
+    const description =
+      $("#authDescription");
+
+    if(description){
+
+      description.textContent =
+        profile === "ester"
+          ? "👩 Ester selecionada. Digite seu PIN."
+          : "👨 Carlos selecionado. Digite seu PIN.";
+
+    }
+
+  }
+
+  $("#profileEster").onclick =
+    function(){
+
+      selectProfile("ester");
+
+    };
+
+  $("#profileCarlos").onclick =
+    function(){
+
+      selectProfile("carlos");
+
+    };
+
+  $("#authClose").onclick =
+    function(){
+
+      panel.remove();
+
+    };
+
+  $("#authSubmit").onclick =
+    function(){
+
+      loginWithPin(
+        selectedProfile
+      );
+
+    };
+
+  $("#authPassword").addEventListener(
+    "input",
+    function(){
+
+      this.value =
+        this.value
+          .replace(/\D/g,"")
+          .slice(0,6);
+
+    }
+  );
+
+  $("#authPassword").addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+
+        loginWithPin(
+          selectedProfile
+        );
+
+      }
+
+    }
+  );
+
 }
 
 // ============================================================
-// LOGIN COM SENHA
+// LOGIN COM PIN
 // ============================================================
 
-async function loginWithPassword(){
+async function loginWithPin(profile){
 
-  const email = $("#authEmail")?.value.trim();
-  const password = $("#authPassword")?.value;
-  const message = $("#authMessage");
+  const password =
+    $("#authPassword")?.value;
 
-  if(!email || !password){
+  const message =
+    $("#authMessage");
+
+  if(!profile){
 
     if(message){
+
       message.textContent =
-        "Digite seu e-mail e sua senha.";
+        "Escolha Ester ou Carlos.";
+
     }
 
     return;
+
+  }
+
+  if(!password){
+
+    if(message){
+
+      message.textContent =
+        "Digite seu PIN.";
+
+    }
+
+    return;
+
+  }
+
+  if(!/^\d{6}$/.test(password)){
+
+    if(message){
+
+      message.textContent =
+        "O PIN precisa ter exatamente 6 números.";
+
+    }
+
+    return;
+
   }
 
   if(!sb){
 
-    message.textContent =
-      "Supabase não está configurado.";
-
-    return;
-  }
-
-  message.textContent = "Entrando…";
-
-  try{
-
-    const result = await sb.auth.signInWithPassword({
-      email:email,
-      password:password
-    });
-
-    if(result.error){
-
-      message.textContent = result.error.message;
-
-      return;
-    }
-
-    user = result.data.user;
-
-    message.textContent = "Login realizado!";
-
-    await pullCloud();
-
-    setTimeout(function(){
-
-      const panel = $("#passwordAuthPanel");
-
-      if(panel){
-        panel.remove();
-      }
-
-    },700);
-
-  }catch(error){
-
-    console.error(error);
-
-    message.textContent =
-      "Não foi possível entrar. Verifique o e-mail e a senha.";
-  }
-}
-
-// ============================================================
-// CRIAR CONTA
-// ============================================================
-
-async function createAccount(){
-
-  const email = $("#authEmail")?.value.trim();
-  const password = $("#authPassword")?.value;
-  const message = $("#authMessage");
-
-  if(!email || !password){
-
-    message.textContent =
-      "Digite seu e-mail e escolha uma senha.";
-
-    return;
-  }
-
-  if(password.length < 6){
-
-    message.textContent =
-      "A senha precisa ter pelo menos 6 caracteres.";
-
-    return;
-  }
-
-  if(!sb){
-
-    message.textContent =
-      "Supabase não está configurado.";
-
-    return;
-  }
-
-  message.textContent = "Criando conta…";
-
-  try{
-
-    const result = await sb.auth.signUp({
-      email:email,
-      password:password,
-      options:{
-        emailRedirectTo:
-          window.location.origin +
-          window.location.pathname
-      }
-    });
-
-    if(result.error){
+    if(message){
 
       message.textContent =
-        result.error.message;
-
-      return;
-    }
-
-    if(result.data.session){
-
-      user = result.data.user;
-
-      message.textContent =
-        "Conta criada e login realizado!";
-
-      await pullCloud();
-
-    }else{
-
-      message.textContent =
-        "Conta criada! Confira seu e-mail para confirmar a conta.";
+        "Supabase não está configurado.";
 
     }
 
-  }catch(error){
+    return;
 
-    console.error(error);
-
-    message.textContent =
-      "Não foi possível criar a conta.";
   }
-}
 
-// ============================================================
-// ESQUECI MINHA SENHA
-// ============================================================
-
-async function resetPassword(){
-
-  const email = $("#authEmail")?.value.trim();
-  const message = $("#authMessage");
+  const email =
+    AUTH_USERS[profile];
 
   if(!email){
 
-    message.textContent =
-      "Digite seu e-mail primeiro.";
+    if(message){
+
+      message.textContent =
+        "Perfil não configurado.";
+
+    }
 
     return;
+
   }
 
-  if(!sb){
+  if(message){
 
     message.textContent =
-      "Supabase não está configurado.";
+      "Entrando…";
 
-    return;
   }
-
-  message.textContent =
-    "Enviando recuperação de senha…";
 
   try{
 
     const result =
-      await sb.auth.resetPasswordForEmail(email,{
-        redirectTo:
-          window.location.origin +
-          window.location.pathname
+      await sb.auth.signInWithPassword({
+
+        email:
+          email,
+
+        password:
+          password
+
       });
 
     if(result.error){
 
-      message.textContent =
-        result.error.message;
+      console.error(
+        "Erro login:",
+        result.error
+      );
+
+      if(message){
+
+        message.textContent =
+          "PIN incorreto. Verifique o perfil e tente novamente.";
+
+      }
 
       return;
+
     }
 
-    message.textContent =
-      "Se o e-mail estiver cadastrado, enviaremos um link para redefinir sua senha.";
+    user =
+      result.data.user;
+
+    activeProfile =
+      profile;
+
+    localStorage.setItem(
+      "italia-profile",
+      profile
+    );
+
+    if(message){
+
+      message.textContent =
+        "Login realizado!";
+
+    }
+
+    await pullCloud();
+
+    setTimeout(
+      function(){
+
+        const panel =
+          $("#passwordAuthPanel");
+
+        if(panel){
+
+          panel.remove();
+
+        }
+
+      },
+      600
+    );
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Erro ao entrar:",
+      error
+    );
 
-    message.textContent =
-      "Não foi possível solicitar a recuperação.";
+    if(message){
+
+      message.textContent =
+        "Não foi possível entrar. Verifique o PIN.";
+
+    }
+
   }
+
 }
 
 // ============================================================
@@ -904,29 +1248,55 @@ async function resetPassword(){
 
 async function logout(){
 
-  if(!sb) return;
+  if(!sb){
+
+    return;
+
+  }
 
   try{
 
     await sb.auth.signOut();
 
-    user = null;
+    user =
+      null;
 
-    const status = $("#syncStatus");
-    const button = $("#loginBtn");
+    activeProfile =
+      null;
+
+    localStorage.removeItem(
+      "italia-profile"
+    );
+
+    const status =
+      $("#syncStatus");
+
+    const button =
+      $("#loginBtn");
 
     if(status){
-      status.textContent = "● Não conectado";
+
+      status.textContent =
+        "● Não conectado";
+
     }
 
     if(button){
-      button.textContent = "Entrar / Criar conta";
+
+      button.textContent =
+        "Entrar";
+
     }
 
   }catch(error){
 
-    console.error("Erro ao sair:",error);
+    console.error(
+      "Erro ao sair:",
+      error
+    );
+
   }
+
 }
 
 // ============================================================
@@ -935,29 +1305,46 @@ async function logout(){
 
 function setupLoginButton(){
 
-  const button = $("#loginBtn");
+  const button =
+    $("#loginBtn");
 
-  if(!button) return;
+  if(!button){
 
-  button.onclick = function(){
+    return;
 
-    if(user){
+  }
 
-      const choice = confirm(
-        "Você está conectado como " +
-        user.email +
-        ".\n\nDeseja sair da conta?"
-      );
+  button.onclick =
+    function(){
 
-      if(choice){
-        logout();
+      if(user){
+
+        const profileName =
+          activeProfile === "ester"
+            ? "Ester 👩"
+            : "Carlos 👨";
+
+        const choice =
+          confirm(
+            "Você está conectado como " +
+            profileName +
+            ".\n\nDeseja sair da conta?"
+          );
+
+        if(choice){
+
+          logout();
+
+        }
+
+        return;
+
       }
 
-      return;
-    }
+      createAuthPanel();
 
-    createAuthPanel();
-  };
+    };
+
 }
 
 // ============================================================
@@ -966,36 +1353,52 @@ function setupLoginButton(){
 
 function setupFinance(){
 
-  const goal = $("#goal");
-  const saved = $("#saved");
+  const goal =
+    $("#goal");
+
+  const saved =
+    $("#saved");
 
   if(goal){
 
-    goal.addEventListener("change",function(){
+    goal.addEventListener(
+      "change",
+      function(){
 
-      state.goal =
-        Number(goal.value) || 0;
+        state.goal =
+          Number(
+            goal.value
+          ) || 0;
 
-      localSave();
-      render();
-      queueCloudSave();
+        localSave();
+        render();
+        queueCloudSave();
 
-    });
+      }
+    );
+
   }
 
   if(saved){
 
-    saved.addEventListener("change",function(){
+    saved.addEventListener(
+      "change",
+      function(){
 
-      state.saved =
-        Number(saved.value) || 0;
+        state.saved =
+          Number(
+            saved.value
+          ) || 0;
 
-      localSave();
-      render();
-      queueCloudSave();
+        localSave();
+        render();
+        queueCloudSave();
 
-    });
+      }
+    );
+
   }
+
 }
 
 // ============================================================
@@ -1010,7 +1413,13 @@ function startApp(){
 
   loadLocal();
 
-  sb = initializeSupabase();
+  activeProfile =
+    localStorage.getItem(
+      "italia-profile"
+    );
+
+  sb =
+    initializeSupabase();
 
   setupFinance();
 
@@ -1030,19 +1439,25 @@ function startApp(){
           event
         );
 
-        user = session?.user || null;
+        user =
+          session?.user || null;
 
         refreshAuth();
+
       }
     );
+
   }
+
 }
 
 // ============================================================
 // GARANTE QUE O HTML JÁ CARREGOU
 // ============================================================
 
-if(document.readyState === "loading"){
+if(
+  document.readyState === "loading"
+){
 
   document.addEventListener(
     "DOMContentLoaded",
@@ -1052,4 +1467,5 @@ if(document.readyState === "loading"){
 }else{
 
   startApp();
+
 }
