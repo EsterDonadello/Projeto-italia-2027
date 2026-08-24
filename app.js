@@ -16,7 +16,7 @@ alert("NOVO APP.JS CARREGADO!");
 //
 
 const AUTH_USERS = {
-  ester: "estermarina6174@gmail.com",
+  ester: "esterdonadello2002@gmail.com",
   carlos: "viniciusduarth@gmail.com"
 };
 
